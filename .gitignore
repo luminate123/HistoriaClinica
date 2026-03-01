@@ -23,6 +23,7 @@
 # cloudflare
 /.open-next/
 /.wrangler/
+wrangler.toml
 
 # misc
 .DS_Store
