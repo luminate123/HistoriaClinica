@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema de Historias Clínicas
 
-## Getting Started
+Sistema profesional para la gestión de historias clínicas, pacientes y consultas médicas construido con Next.js, Tailwind CSS y Cloudflare (D1 + Access + Pages).
 
-First, run the development server:
+## Características
+
+- **Gestión de Pacientes**: Registro completo de información de pacientes
+- **Historias Clínicas**: Creación y consulta de registros médicos detallados
+- **Citas Médicas**: Sistema de gestión de citas y programación
+- **Autenticación Zero Trust**: Protegido con Cloudflare Access
+- **Interfaz Moderna**: UI/UX diseñada con Tailwind CSS v4
+- **Responsive**: Funciona en dispositivos móviles y escritorio
+- **Búsqueda Avanzada**: Filtrado y búsqueda de pacientes e historias
+- **100% Edge**: Desplegado en Cloudflare Pages (Workers runtime)
+
+## Tecnologías
+
+- **Framework**: Next.js 16 (App Router), React 19, TypeScript
+- **Styling**: Tailwind CSS v4
+- **Base de Datos**: Cloudflare D1 (SQLite)
+- **ORM**: Drizzle ORM
+- **Autenticación**: Cloudflare Access (Zero Trust)
+- **Deploy**: Cloudflare Pages via @opennextjs/cloudflare
+- **Utilidades**: date-fns, jose (JWT)
+
+## Requisitos Previos
+
+- Node.js 18+
+- Cuenta en Cloudflare (plan gratuito)
+- Wrangler CLI (`npm i -g wrangler`)
+
+## Instalación Rápida
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Login en Cloudflare
+npx wrangler login
+
+# Crear la base de datos D1
+npx wrangler d1 create historia-clinica
+
+# Copiar el database_id devuelto y pegarlo en wrangler.toml
+
+# Ejecutar migración
+npx wrangler d1 execute historia-clinica --file=drizzle/migrations/0001_initial.sql
+
+# (Opcional) Insertar datos de demostración
+npx wrangler d1 execute historia-clinica --file=scripts/seed.sql
+
+# Desarrollo local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuración de Cloudflare Access
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Ve a [Cloudflare Zero Trust Dashboard](https://one.dash.cloudflare.com)
+2. Crea una **Application** de tipo _Self-hosted_
+3. Configura el dominio de tu proyecto (ej: `historiaclinica.pages.dev`)
+4. Agrega una **Policy** para controlar quién accede
+5. Copia el **Application Audience (AUD)** tag
+6. Actualiza `wrangler.toml` con tu `CF_ACCESS_TEAM_DOMAIN` y `CF_ACCESS_AUD`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Script | Descripción |
+|------|------------|
+| `npm run dev` | Desarrollo local con Turbopack |
+| `npm run build` | Build Next.js estándar |
+| `npm run build:worker` | Build completo para Cloudflare Worker |
+| `npm run preview` | Preview local del Worker build |
+| `npm run deploy` | Deploy a Cloudflare Pages |
+| `npm run db:generate` | Generar migraciones Drizzle |
+| `npm run db:migrate:local` | Ejecutar migraciones en D1 local |
+| `npm run db:migrate:remote` | Ejecutar migraciones en D1 remoto |
+| `npm run db:seed:local` | Insertar datos demo en D1 local |
+| `npm run db:seed:remote` | Insertar datos demo en D1 remoto |
 
-To learn more about Next.js, take a look at the following resources:
+## Estructura del Proyecto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+├── page.tsx                 # Landing page pública
+├── layout.tsx               # Root layout
+├── globals.css              # Estilos globales (Tailwind v4)
+└── (protected)/
+    ├── layout.tsx           # Layout autenticado (Server Component)
+    ├── sidebar.tsx          # Sidebar de navegación (Client Component)
+    ├── dashboard/page.tsx   # Panel principal
+    ├── patients/            # CRUD de pacientes
+    ├── records/             # CRUD de historias clínicas
+    └── appointments/        # Gestión de citas
+lib/
+├── db/
+│   ├── schema.ts            # Esquema Drizzle (patients, medical_records, appointments)
+│   └── index.ts             # Helper getDb()
+├── auth/
+│   ├── cf-access.ts         # Validación JWT de CF Access
+│   └── get-user.ts          # Helper para obtener usuario autenticado
+└── actions/
+    ├── patients.ts          # Server Actions de pacientes
+    ├── records.ts           # Server Actions de historias clínicas
+    └── appointments.ts      # Server Actions de citas
+middleware.ts                # Validación de CF Access JWT + inyección de headers
+wrangler.toml               # Config de Cloudflare Pages + D1
+drizzle/migrations/          # SQL de migración
+scripts/seed.sql             # Datos de demostración
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Arquitectura
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Server Components** para todas las páginas (data fetching en el edge)
+- **Server Actions** para mutaciones (create, update, delete)
+- **Client Components** solo para interactividad (search, forms, filters)
+- D1 binding accesible únicamente server-side via `getCloudflareContext()`
+- Middleware valida JWT de CF Access en cada request protegida
+- En desarrollo (`NODE_ENV=development`), se inyecta un usuario mock
