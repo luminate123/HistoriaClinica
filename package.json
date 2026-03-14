@@ -7,14 +7,14 @@
     "build": "next build",
     "build:worker": "opennextjs-cloudflare build",
     "preview": "opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare deploy",
+    "deploy": "opennextjs-cloudflare build && wrangler pages deploy",
     "start": "next start",
     "lint": "eslint",
-    "db:generate": "drizzle-kit generate",
+    "db:generate": "drizzle-kit generate --config=config/drizzle.config.ts",
     "db:migrate:local": "wrangler d1 migrations apply historiaclinica --local",
     "db:migrate:remote": "wrangler d1 migrations apply historiaclinica --remote",
-    "db:seed:local": "wrangler d1 execute historiaclinica --local --file=scripts/seed.sql",
-    "db:seed:remote": "wrangler d1 execute historiaclinica --remote --file=scripts/seed.sql"
+    "db:seed:local": "wrangler d1 execute historiaclinica --local --file=tools/scripts/seed.sql",
+    "db:seed:remote": "wrangler d1 execute historiaclinica --remote --file=tools/scripts/seed.sql"
   },
   "dependencies": {
     "date-fns": "^4.1.0",

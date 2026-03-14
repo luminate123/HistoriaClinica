@@ -38,7 +38,7 @@ npx wrangler d1 execute historia-clinica --file=drizzle/migrations/0001_initial.
 ### Paso 5: (Opcional) Insertar datos demo
 
 ```bash
-npx wrangler d1 execute historia-clinica --file=scripts/seed.sql
+npx wrangler d1 execute historia-clinica --file=tools/scripts/seed.sql
 ```
 
 ### Paso 6: Desarrollo local

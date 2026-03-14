@@ -47,7 +47,7 @@ npx wrangler d1 create historia-clinica
 npx wrangler d1 execute historia-clinica --file=drizzle/migrations/0001_initial.sql
 
 # (Opcional) Insertar datos de demostración
-npx wrangler d1 execute historia-clinica --file=scripts/seed.sql
+npx wrangler d1 execute historia-clinica --file=tools/scripts/seed.sql
 
 # Desarrollo local
 npm run dev
@@ -80,32 +80,24 @@ npm run dev
 ## Estructura del Proyecto
 
 ```
-app/
-├── page.tsx                 # Landing page pública
-├── layout.tsx               # Root layout
-├── globals.css              # Estilos globales (Tailwind v4)
-└── (protected)/
-    ├── layout.tsx           # Layout autenticado (Server Component)
-    ├── sidebar.tsx          # Sidebar de navegación (Client Component)
-    ├── dashboard/page.tsx   # Panel principal
-    ├── patients/            # CRUD de pacientes
-    ├── records/             # CRUD de historias clínicas
-    └── appointments/        # Gestión de citas
-lib/
-├── db/
-│   ├── schema.ts            # Esquema Drizzle (patients, medical_records, appointments)
-│   └── index.ts             # Helper getDb()
-├── auth/
-│   ├── cf-access.ts         # Validación JWT de CF Access
-│   └── get-user.ts          # Helper para obtener usuario autenticado
-└── actions/
-    ├── patients.ts          # Server Actions de pacientes
-    ├── records.ts           # Server Actions de historias clínicas
-    └── appointments.ts      # Server Actions de citas
-middleware.ts                # Validación de CF Access JWT + inyección de headers
-wrangler.toml               # Config de Cloudflare Pages + D1
+docs/                        # Arquitectura y documentación operativa
+.claude/                     # Configuración y utilidades para asistentes IA
+tools/
+├── scripts/seed.sql         # Datos de demostración
+└── prompts/                 # Plantillas de prompts
+src/
+├── app/
+│   ├── page.tsx             # Landing page pública
+│   ├── layout.tsx           # Root layout
+│   ├── globals.css          # Estilos globales (Tailwind v4)
+│   └── (protected)/         # Área autenticada
+├── lib/
+│   ├── db/                  # Drizzle schema + conexión
+│   ├── auth/                # Auth y usuario actual
+│   └── actions/             # Server Actions de dominio
+└── middleware.ts            # Middleware de CF Access
+wrangler.toml                # Config de Cloudflare Pages + D1
 drizzle/migrations/          # SQL de migración
-scripts/seed.sql             # Datos de demostración
 ```
 
 ## Arquitectura

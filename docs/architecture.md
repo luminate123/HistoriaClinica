@@ -47,15 +47,15 @@ El sistema ha sido migrado de Supabase a una arquitectura 100% Cloudflare (D1 + 
 | Archivo | Propósito |
 |--------|----------|
 | `wrangler.toml` | Config de CF Pages + D1 binding |
-| `lib/db/schema.ts` | Esquema Drizzle (patients, medical_records, appointments) |
-| `lib/auth/cf-access.ts` | Validación JWT de CF Access |
-| `lib/auth/get-user.ts` | Helper `getUser()` / `requireUser()` |
-| `middleware.ts` | Validación JWT + bypass dev |
-| `lib/actions/patients.ts` | Server Actions de pacientes |
-| `lib/actions/records.ts` | Server Actions de historias |
-| `lib/actions/appointments.ts` | Server Actions de citas |
+| `src/lib/db/schema.ts` | Esquema Drizzle (patients, medical_records, appointments) |
+| `src/lib/auth/cf-access.ts` | Validación JWT de CF Access |
+| `src/lib/auth/get-user.ts` | Helper `getUser()` / `requireUser()` |
+| `src/middleware.ts` | Validación JWT + bypass dev |
+| `src/lib/actions/patients.ts` | Server Actions de pacientes |
+| `src/lib/actions/records.ts` | Server Actions de historias |
+| `src/lib/actions/appointments.ts` | Server Actions de citas |
 | `drizzle/migrations/0001_initial.sql` | Schema SQL para D1 |
-| `scripts/seed.sql` | Datos demo (5 pacientes, 6 historias, 5 citas) |
+| `tools/scripts/seed.sql` | Datos demo (5 pacientes, 6 historias, 5 citas) |
 
 ## Próximos Pasos
 

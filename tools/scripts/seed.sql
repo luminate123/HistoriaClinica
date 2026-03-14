@@ -1,5 +1,5 @@
 -- Seed data for Historia Clínica demo
--- Run with: wrangler d1 execute historia-clinica --file=scripts/seed.sql
+-- Run with: wrangler d1 execute historia-clinica --file=tools/scripts/seed.sql
 
 -- Patients
 INSERT INTO patients (id, identification_number, first_name, last_name, date_of_birth, gender, blood_type, phone, email, address, emergency_contact_name, emergency_contact_phone) VALUES

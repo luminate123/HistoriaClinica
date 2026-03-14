@@ -3,7 +3,7 @@
 ## Cloudflare D1 (SQLite)
 
 El esquema se define en dos lugares:
-- **Drizzle ORM**: `lib/db/schema.ts` (fuente de verdad para TypeScript)
+- **Drizzle ORM**: `src/lib/db/schema.ts` (fuente de verdad para TypeScript)
 - **Migración SQL**: `drizzle/migrations/0001_initial.sql` (fuente de verdad para D1)
 
 ## Setup
@@ -16,7 +16,7 @@ npx wrangler d1 create historia-clinica
 npx wrangler d1 execute historia-clinica --file=drizzle/migrations/0001_initial.sql
 
 # (Opcional) Insertar datos demo
-npx wrangler d1 execute historia-clinica --file=scripts/seed.sql
+npx wrangler d1 execute historia-clinica --file=tools/scripts/seed.sql
 ```
 
 ## Tablas
